@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIW Festival - Regista</title>
+    <link rel="stylesheet" th:href="@{/css/stile.css}" />
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="page-content">
+        <div class="form-container">
+            <h2 th:text="${regista.id != null ? 'Modifica Regista' : 'Nuovo Regista'}">Regista</h2>
+
+            <form th:action="${regista.id != null ? '/admin/regista/' + regista.id + '/edit' : '/admin/registi'}"
+                  method="POST" th:object="${regista}">
+
+                <label for="nome">Nome</label>
+                <input required type="text" id="nome" th:field="*{nome}" placeholder="Nome" />
+                <span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="error-msg"></span>
+
+                <label for="cognome">Cognome</label>
+                <input required type="text" id="cognome" th:field="*{cognome}" placeholder="Cognome" />
+                <span th:if="${#fields.hasErrors('cognome')}" th:errors="*{cognome}" class="error-msg"></span>
+
+                <label for="dataNascita">Data di Nascita</label>
+                <input required type="date" id="dataNascita" th:field="*{dataNascita}" />
+                <span th:if="${#fields.hasErrors('dataNascita')}" th:errors="*{dataNascita}" class="error-msg"></span>
+
+                <label for="nazionalita">Nazionalita'</label>
+                <input required type="text" id="nazionalita" th:field="*{nazionalita}" placeholder="Es. Italiana" />
+                <span th:if="${#fields.hasErrors('nazionalita')}" th:errors="*{nazionalita}" class="error-msg"></span>
+
+                <button type="submit">Conferma</button>
+            </form>
+        </div>
+    </section>
+</body>
+</html>

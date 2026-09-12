@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIW Festival - Tutte le Proiezioni</title>
+    <link rel="stylesheet" th:href="@{/css/stile.css}" />
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="page-content">
+        <div class="page-header">
+            <h1>Tutte le Proiezioni</h1>
+            <p class="page-subtitle">Elenco completo delle proiezioni registrate</p>
+        </div>
+
+        <div th:if="${proiezioni.isEmpty()}" class="empty-state">
+            <p>Nessuna proiezione registrata.</p>
+        </div>
+
+        <div th:unless="${proiezioni.isEmpty()}">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Ora</th>
+                        <th>Festival</th>
+                        <th>Film</th>
+                        <th>Sala</th>
+                        <th>Stato</th>
+                        <th></th>
+                        <th sec:authorize="hasRole('ADMIN')"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="p : ${proiezioni}">
+                        <td th:text="${#temporals.format(p.data, 'dd/MM/yyyy')}">Data</td>
+                        <td th:text="${#temporals.format(p.ora, 'HH:mm')}">Ora</td>
+                        <td>
+                            <a th:href="@{'/festival/' + ${p.festival?.id}}"
+                               th:text="${p.festival?.nome}">Festival</a>
+                        </td>
+                        <td th:text="${p.film?.titolo}">Film</td>
+                        <td th:text="${p.sala?.nome}">Sala</td>
+                        <td><span class="status-badge"
+                                  th:classappend="${p.stato?.name() == 'COMPLETED' ? 'status-completed' : (p.stato?.name() == 'CANCELLED' ? 'status-cancelled' : 'status-scheduled')}"
+                                  th:text="${p.stato}">Stato</span></td>
+                        <td><a th:href="@{'/proiezione/' + ${p.id}}" class="btn-small">Vedi</a></td>
+                        <td sec:authorize="hasRole('ADMIN')">
+                            <form th:action="@{'/admin/proiezione/' + ${p.id} + '/delete'}" method="POST" style="margin:0;">
+                                <button type="submit" class="btn-small btn-danger"
+                                        onclick="return confirm('Eliminare questa proiezione?')">Elimina</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="detail-actions">
+            <a th:href="@{/admin/dashboard}" class="btn btn-secondary">&larr; Dashboard</a>
+            <a th:href="@{/admin/proiezioni/new}" class="btn btn-primary">+ Nuova Proiezione</a>
+        </div>
+    </section>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIW Festival - Lista Sale</title>
+    <link rel="stylesheet" th:href="@{/css/stile.css}" />
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="page-content">
+        <div class="page-header">
+            <h1>Sale Cinematografiche</h1>
+            <p class="page-subtitle">Gestione delle sale del sistema</p>
+        </div>
+
+        <div th:if="${sale.isEmpty()}" class="empty-state">
+            <div class="empty-icon"></div>
+            <p>Nessuna sala registrata.</p>
+        </div>
+
+        <div th:unless="${sale.isEmpty()}">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Indirizzo</th>
+                        <th>Capienza</th>
+                        <th>Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="s : ${sale}">
+                        <td th:text="${s.nome}">Nome</td>
+                        <td th:text="${s.indirizzo}">Indirizzo</td>
+                        <td th:text="${s.capienza} + ' posti'">100 posti</td>
+                        <td>
+                            <a th:href="@{'/sala/' + ${s.id}}" class="btn-small">Vedi</a>
+                            <a th:href="@{'/admin/sala/' + ${s.id} + '/edit'}" class="btn-small">Modifica</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="page-actions">
+            <a th:href="@{/admin/sale/new}" class="btn btn-primary">Nuova Sala</a>
+            <a th:href="@{/admin/dashboard}" class="btn btn-secondary">&larr; Dashboard</a>
+        </div>
+    </section>
+</body>
+</html>

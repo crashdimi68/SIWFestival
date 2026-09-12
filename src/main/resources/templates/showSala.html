@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIW Festival - Dettaglio Sala</title>
+    <link rel="stylesheet" th:href="@{/css/stile.css}" />
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="page-content" th:if="${sala}">
+        <div class="detail-card">
+            <div class="detail-header">
+                <div class="detail-icon"></div>
+                <h1 th:text="${sala.nome}">Nome Sala</h1>
+                <span class="detail-badge" th:text="${sala.capienza} + ' posti'">100 posti</span>
+            </div>
+
+            <div class="detail-body">
+                <div class="detail-field">
+                    <span class="detail-label">Indirizzo</span>
+                    <p th:text="${sala.indirizzo}">Via Roma 1</p>
+                </div>
+
+                <div class="detail-field" th:if="${proiezioni != null and !proiezioni.isEmpty()}">
+                    <span class="detail-label">Proiezioni Ospitate</span>
+                    <div class="event-list">
+                        <a th:each="p : ${proiezioni}" th:href="@{'/proiezione/' + ${p.id}}" class="event-item">
+                            <span th:text="${p.film != null ? p.film.titolo : '?'}">Film</span>
+                            <span th:text="${#temporals.format(p.data, 'dd/MM/yyyy')} + ' ' + ${#temporals.format(p.ora, 'HH:mm')}">Data</span>
+                            <span class="event-state" th:text="${p.stato}">SCHEDULED</span>
+                        </a>
+                    </div>
+                </div>
+                <p th:if="${proiezioni == null or proiezioni.isEmpty()}" class="empty-text">
+                    Nessuna proiezione programmata in questa sala.
+                </p>
+            </div>
+
+            <div class="detail-actions">
+                <a th:href="@{/festival}" class="btn btn-secondary">&larr; Torna ai Festival</a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

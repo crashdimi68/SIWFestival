@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIW Festival - Programma Proiezione</title>
+    <link rel="stylesheet" th:href="@{/css/stile.css}" />
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="page-content">
+        <div class="form-container">
+            <h2>Programma una Proiezione</h2>
+
+            <p th:if="${errore}" class="error-msg" th:text="${errore}"></p>
+
+            <!-- Primo passo: scelta del festival. I film selezionabili sono solo quelli
+                 iscritti al festival scelto, quindi la pagina si ricarica al cambio. -->
+            <form th:action="@{/admin/proiezioni/new}" method="GET">
+                <label for="festivalSelect">Festival</label>
+                <select name="festivalId" id="festivalSelect" required onchange="this.form.submit()">
+                    <option value="">-- Seleziona Festival --</option>
+                    <option th:each="f : ${festivalList}" th:value="${f.id}"
+                            th:text="${f.nome + ' (' + f.anno + ')'}"
+                            th:selected="${festivalSelezionato != null and festivalSelezionato == f.id}">Festival</option>
+                </select>
+                <noscript><button type="submit">Scegli festival</button></noscript>
+            </form>
+
+            <div th:if="${festivalSelezionato == null}" class="empty-state">
+                <p>Seleziona prima un festival per vedere i film in concorso.</p>
+            </div>
+
+            <form th:if="${festivalSelezionato != null}" th:action="@{/admin/proiezioni}" method="POST">
+                <input type="hidden" name="festivalId" th:value="${festivalSelezionato}" />
+
+                <label for="filmId">Film</label>
+                <select name="filmId" id="filmId" required>
+                    <option value="">-- Seleziona Film --</option>
+                    <option th:each="f : ${filmDisponibili}" th:value="${f.id}"
+                            th:text="${f.titolo + ' (' + f.durata + ' min)'}">Film</option>
+                </select>
+                <p th:if="${filmDisponibili == null or filmDisponibili.isEmpty()}" class="empty-text">
+                    Questo festival non ha ancora film iscritti: associane uno prima di programmare una proiezione.
+                </p>
+
+                <label for="salaId">Sala</label>
+                <select name="salaId" id="salaId" required>
+                    <option value="">-- Seleziona Sala --</option>
+                    <option th:each="s : ${sale}" th:value="${s.id}"
+                            th:text="${s.nome + ' (' + s.capienza + ' posti)'}">Sala</option>
+                </select>
+
+                <label for="data">Data</label>
+                <input required type="date" id="data" name="data" />
+
+                <label for="ora">Ora</label>
+                <input required type="time" id="ora" name="ora" />
+
+                <button type="submit">Programma</button>
+            </form>
+
+            <div class="form-link">
+                <a th:href="@{/admin/dashboard}">&larr; Torna alla dashboard</a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

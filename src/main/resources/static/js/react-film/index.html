@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIW Festival - Ricerca Film React (dev)</title>
+    <style>
+      body { margin: 0; font-family: system-ui, sans-serif; background: #150a12; color: #fff; padding: 2rem; }
+    </style>
+    <script type="module" crossorigin src="/js/react-film/assets/index.js"></script>
+  </head>
+  <body>
+    <h1>Anteprima widget ricerca film</h1>
+    <!-- Ricrea il "punto di aggancio" che nella pagina Thymeleaf e' fornito dal server -->
+    <div id="film-react-root" data-api-base="/api"></div>
+  </body>
+</html>

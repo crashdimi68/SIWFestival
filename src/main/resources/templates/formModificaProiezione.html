@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIW Festival - Riprogramma Proiezione</title>
+    <link rel="stylesheet" th:href="@{/css/stile.css}" />
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="page-content" th:if="${proiezione}">
+        <div class="form-container">
+            <h2>Riprogramma Proiezione</h2>
+            <p style="text-align:center; margin-bottom:1.5rem;">
+                <strong th:text="${proiezione.film != null ? proiezione.film.titolo : '?'}">Film</strong>
+            </p>
+
+            <p th:if="${errore}" class="error-msg" th:text="${errore}"></p>
+
+            <form th:action="@{'/admin/proiezione/' + ${proiezione.id} + '/edit'}" method="POST">
+
+                <label for="salaId">Sala</label>
+                <select name="salaId" id="salaId" required>
+                    <option th:each="s : ${sale}" th:value="${s.id}"
+                            th:text="${s.nome + ' (' + s.capienza + ' posti)'}"
+                            th:selected="${proiezione.sala != null and proiezione.sala.id == s.id}">Sala</option>
+                </select>
+
+                <label for="data">Data</label>
+                <input required type="date" id="data" name="data" th:value="${proiezione.data}" />
+
+                <label for="ora">Ora</label>
+                <input required type="time" id="ora" name="ora" th:value="${proiezione.ora}" />
+
+                <button type="submit">Conferma</button>
+            </form>
+
+            <div class="form-link">
+                <a th:href="@{'/proiezione/' + ${proiezione.id}}">&larr; Torna alla proiezione</a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

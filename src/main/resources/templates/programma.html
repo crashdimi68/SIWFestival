@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIW Festival - Programma</title>
+    <link rel="stylesheet" th:href="@{/css/stile.css}" />
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="page-content">
+        <div class="page-header">
+            <h1>Programma delle Proiezioni</h1>
+            <p class="page-subtitle" th:text="'Festival: ' + ${festival.nome} + ' (' + ${festival.citta} + ')'">Festival</p>
+        </div>
+
+        <div th:if="${programma != null and !programma.isEmpty()}">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Data</th>
+                        <th>Inizio</th>
+                        <th>Fine</th>
+                        <th>Film</th>
+                        <th>Genere</th>
+                        <th>Durata</th>
+                        <th>Sala</th>
+                        <th>Posti</th>
+                        <th>Stato</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="riga : ${programma}">
+                        <td th:text="${riga.posizione}">1</td>
+                        <td>
+                            <strong th:if="${riga.primaDelGiorno}"
+                                    th:text="${#temporals.format(riga.data, 'dd/MM/yyyy')}">Data</strong>
+                            <span th:unless="${riga.primaDelGiorno}"
+                                  th:text="${#temporals.format(riga.data, 'dd/MM/yyyy')}">Data</span>
+                        </td>
+                        <td th:text="${#temporals.format(riga.ora, 'HH:mm')}">20:00</td>
+                        <td th:text="${riga.oraFine != null ? #temporals.format(riga.oraFine, 'HH:mm') : '-'}">22:00</td>
+                        <td>
+                            <a th:href="@{'/film/' + ${riga.filmId}}" th:text="${riga.filmTitolo}">Film</a>
+                        </td>
+                        <td th:text="${riga.filmGenere}">Genere</td>
+                        <td th:text="${riga.filmDurata} + ' min'">120 min</td>
+                        <td>
+                            <a th:href="@{'/sala/' + ${riga.salaId}}" th:text="${riga.salaNome}">Sala</a>
+                        </td>
+                        <td th:text="${riga.salaCapienza}">180</td>
+                        <td><span class="status-badge"
+                                  th:classappend="${riga.stato == 'COMPLETED' ? 'status-completed' : (riga.stato == 'CANCELLED' ? 'status-cancelled' : 'status-scheduled')}"
+                                  th:text="${riga.stato}">Stato</span></td>
+                        <td><a th:href="@{'/proiezione/' + ${riga.proiezioneId}}" class="btn-small">Vedi</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:if="${programma == null or programma.isEmpty()}" class="empty-state">
+            <div class="empty-icon"></div>
+            <p>Nessuna proiezione programmata. Il programma verra' generato dopo la prima programmazione.</p>
+        </div>
+
+        <div class="detail-actions">
+            <a th:href="@{'/festival/' + ${festival.id}}" class="btn btn-secondary">&larr; Torna al Festival</a>
+            <a sec:authorize="hasRole('ADMIN')"
+               th:href="@{/admin/proiezioni/new(festivalId=${festival.id})}" class="btn btn-primary">Programma Proiezione</a>
+        </div>
+    </section>
+</body>
+
+</html>

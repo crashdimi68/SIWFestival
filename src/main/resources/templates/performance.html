@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIW Festival - Analisi Prestazioni</title>
+    <link rel="stylesheet" th:href="@{/css/stile.css}" />
+</head>
+
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="page-content">
+        <div class="page-header">
+            <h1>Analisi Prestazioni &mdash; Strategie di Fetch</h1>
+            <p class="page-subtitle">
+                Confronto sperimentale LAZY vs JOIN FETCH vs EntityGraph
+            </p>
+        </div>
+
+        <div class="detail-card" style="max-width: 900px; margin: 0 auto;">
+            <div class="detail-header">
+                <div class="detail-icon"></div>
+                <h1>Tutti i film con i rispettivi registi</h1>
+                <span class="detail-badge"
+                    th:text="${numeroFilm} + ' film, ' + ${numeroRegisti} + ' registi'">0 film</span>
+            </div>
+
+            <div class="detail-body">
+
+                <div class="perf-bars">
+                    <div class="perf-bar-row" th:each="r, iter : ${risultati}">
+                        <span class="perf-bar-label" th:text="${r.titolo}">Strategia</span>
+                        <div class="perf-bar-track">
+                            <div class="perf-bar-fill"
+                                th:classappend="${r.numeroQuery == 1 ? 'perf-bar-ok' : (iter.index == 0 ? 'perf-bar-problem' : '')}"
+                                th:style="'width: ' + ${r.tempoMs * 100 / maxTempoMs} + '%'"></div>
+                        </div>
+                        <span class="perf-bar-value" th:text="${r.tempoMs} + ' ms'">0 ms</span>
+                    </div>
+                </div>
+
+                <table class="data-table" style="margin-top: 2rem;">
+                    <thead>
+                        <tr>
+                            <th>Strategia</th>
+                            <th>Descrizione</th>
+                            <th>Query SQL</th>
+                            <th>Film caricati</th>
+                            <th>Tempo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="r, iter : ${risultati}">
+                            <td th:text="${r.titolo}">Strategia</td>
+                            <td th:text="${r.descrizione}">Descrizione</td>
+                            <td th:text="${r.numeroQuery}">0</td>
+                            <td th:text="${r.numeroFilm}">0</td>
+                            <td th:text="${r.tempoMs} + ' ms'">0 ms</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="detail-actions">
+                <a th:href="@{/admin/performance}" class="btn btn-secondary">Riesegui il confronto</a>
+                <a th:href="@{/admin/dashboard}" class="btn btn-secondary">&larr; Torna alla Dashboard</a>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIW Festival - Film</title>
+    <link rel="stylesheet" th:href="@{/css/stile.css}" />
+</head>
+
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="page-content">
+        <div class="page-header">
+            <h1>Tutti i Film</h1>
+            <p class="page-subtitle">Seleziona un film per vederne scheda, regista, proiezioni e recensioni</p>
+        </div>
+
+        <div th:if="${film.isEmpty()}" class="empty-state">
+            <div class="empty-icon"></div>
+            <p>Non ci sono film nel sistema.</p>
+        </div>
+
+        <div th:unless="${film.isEmpty()}" class="card-grid">
+            <a th:each="f : ${film}" th:href="@{'/film/' + ${f.id}}" class="card">
+                <div class="card-icon"></div>
+                <h3 th:text="${f.titolo}">Titolo Film</h3>
+                <span class="card-meta"
+                    th:text="${f.anno} + ' - ' + ${f.genere != null ? f.genere.label : ''}">2020 - Genere</span>
+                <div class="card-arrow">Dettagli &rarr;</div>
+            </a>
+        </div>
+
+        <nav th:if="${pagina.totalPages > 1}" class="pagination" aria-label="Navigazione pagine">
+            <a th:if="${!pagina.first}" th:href="@{/film(page=${pagina.number - 1})}"
+                class="pagination-step">&larr; Precedente</a>
+            <span th:if="${pagina.first}" class="pagination-step pagination-disabled">&larr; Precedente</span>
+
+            <a th:each="i : ${#numbers.sequence(0, pagina.totalPages - 1)}"
+                th:href="@{/film(page=${i})}"
+                th:text="${i + 1}"
+                class="pagination-page"
+                th:classappend="${i == pagina.number} ? 'pagination-current' : ''">1</a>
+
+            <a th:if="${!pagina.last}" th:href="@{/film(page=${pagina.number + 1})}"
+                class="pagination-step">Successiva &rarr;</a>
+            <span th:if="${pagina.last}" class="pagination-step pagination-disabled">Successiva &rarr;</span>
+        </nav>
+
+        <p th:if="${pagina.totalElements > 0}" class="pagination-info"
+            th:text="'Pagina ' + (${pagina.number} + 1) + ' di ' + ${pagina.totalPages}
+                   + ' - ' + ${pagina.totalElements} + ' film in totale'">Pagina 1 di 1</p>
+
+        <div class="page-actions">
+            <a th:href="@{/film/cerca}" class="btn btn-primary">Ricerca avanzata (React)</a>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/film/new}" class="btn btn-secondary">Nuovo Film</a>
+        </div>
+    </section>
+</body>
+
+</html>

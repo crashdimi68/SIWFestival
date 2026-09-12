@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIW Festival - Film</title>
+    <link rel="stylesheet" th:href="@{/css/stile.css}" />
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="page-content">
+        <div class="form-container">
+            <h2 th:text="${filmForm.id != null ? 'Modifica Film' : 'Nuovo Film'}">Film</h2>
+
+            <form th:action="${filmForm.id != null ? '/admin/film/' + filmForm.id + '/edit' : '/admin/film'}"
+                  method="POST" th:object="${filmForm}">
+
+                <input type="hidden" name="festivalId" th:if="${festivalId != null}" th:value="${festivalId}" />
+
+                <label for="titolo">Titolo</label>
+                <input required type="text" id="titolo" th:field="*{titolo}" placeholder="Titolo del film" />
+                <span th:if="${#fields.hasErrors('titolo')}" th:errors="*{titolo}" class="error-msg"></span>
+
+                <label for="anno">Anno</label>
+                <input required type="number" id="anno" th:field="*{anno}" placeholder="Es. 2024" />
+                <span th:if="${#fields.hasErrors('anno')}" th:errors="*{anno}" class="error-msg"></span>
+
+                <label for="durata">Durata (minuti)</label>
+                <input required type="number" id="durata" th:field="*{durata}" placeholder="Es. 118" />
+                <span th:if="${#fields.hasErrors('durata')}" th:errors="*{durata}" class="error-msg"></span>
+
+                <label for="genere">Genere</label>
+                <select id="genere" th:field="*{genere}" required>
+                    <option value="">-- Seleziona Genere --</option>
+                    <option th:each="g : ${generi}" th:value="${g}" th:text="${g.label}">Genere</option>
+                </select>
+                <span th:if="${#fields.hasErrors('genere')}" th:errors="*{genere}" class="error-msg"></span>
+
+                <label for="paeseProduzione">Paese di Produzione</label>
+                <input required type="text" id="paeseProduzione" th:field="*{paeseProduzione}" placeholder="Es. Italia" />
+                <span th:if="${#fields.hasErrors('paeseProduzione')}" th:errors="*{paeseProduzione}" class="error-msg"></span>
+
+                <label for="registaId">Regista</label>
+                <select name="registaId" id="registaId" required>
+                    <option value="">-- Seleziona Regista --</option>
+                    <option th:each="r : ${registi}" th:value="${r.id}"
+                            th:text="${r.nome + ' ' + r.cognome}"
+                            th:selected="${filmForm.regista != null and filmForm.regista.id == r.id}">Regista</option>
+                </select>
+
+                <button type="submit">Conferma</button>
+            </form>
+
+            <div class="form-link">
+                <a th:href="@{/admin/registi/new}">+ Crea un nuovo regista</a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIW Festival - Ricerca Film</title>
+    <link rel="stylesheet" th:href="@{/css/stile.css}" />
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="page-content">
+        <div class="page-header">
+            <h1>Ricerca Film</h1>
+            <p class="page-subtitle">Cerca per titolo e filtra per genere (componente React su API REST)</p>
+        </div>
+
+        <div id="film-react-root" th:attr="data-api-base=@{/api}"></div>
+
+        <noscript>
+            <p class="empty-text" style="text-align:center;">
+                Questa pagina richiede JavaScript abilitato. Puoi comunque
+                <a th:href="@{/film}">sfogliare tutti i film qui</a>.
+            </p>
+        </noscript>
+
+        <div class="detail-actions">
+            <a th:href="@{/film}" class="btn btn-secondary">&larr; Torna ai Film</a>
+        </div>
+    </section>
+
+    <script type="module" th:src="@{/js/react-film/assets/index.js(v=1)}"></script>
+</body>
+</html>

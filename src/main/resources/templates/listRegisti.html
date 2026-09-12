@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIW Festival - Registi</title>
+    <link rel="stylesheet" th:href="@{/css/stile.css}" />
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="page-content">
+        <div class="page-header">
+            <h1>Tutti i Registi</h1>
+            <p class="page-subtitle">Elenco dei registi presenti nel sistema</p>
+        </div>
+
+        <div th:if="${registi.isEmpty()}" class="empty-state">
+            <div class="empty-icon"></div>
+            <p>Nessun regista registrato.</p>
+        </div>
+
+        <div th:unless="${registi.isEmpty()}">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Cognome</th>
+                        <th>Data di Nascita</th>
+                        <th>Nazionalita'</th>
+                        <th>Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="r : ${registi}">
+                        <td th:text="${r.nome}">Nome</td>
+                        <td th:text="${r.cognome}">Cognome</td>
+                        <td th:text="${#temporals.format(r.dataNascita, 'dd/MM/yyyy')}">Data</td>
+                        <td th:text="${r.nazionalita}">Nazionalita'</td>
+                        <td>
+                            <a th:href="@{'/regista/' + ${r.id}}" class="btn-small">Vedi</a>
+                            <a sec:authorize="hasRole('ADMIN')"
+                               th:href="@{'/admin/regista/' + ${r.id} + '/edit'}" class="btn-small">Modifica</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div sec:authorize="hasRole('ADMIN')" class="page-actions">
+            <a th:href="@{/admin/registi/new}" class="btn btn-primary">Nuovo Regista</a>
+            <a th:href="@{/admin/dashboard}" class="btn btn-secondary">&larr; Dashboard</a>
+        </div>
+    </section>
+</body>
+</html>

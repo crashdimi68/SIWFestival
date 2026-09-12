@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIW Festival - Il Mio Profilo</title>
+    <link rel="stylesheet" th:href="@{/css/stile.css}" />
+</head>
+
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="page-content">
+        <div class="detail-card" style="max-width: 520px; margin: 0 auto;">
+            <div class="detail-header">
+                <div class="detail-icon"></div>
+                <h1 th:text="${credentials.user.name} + ' ' + ${credentials.user.surname}">Nome Cognome</h1>
+                <span class="detail-badge" th:text="${credentials.role}">DEFAULT</span>
+            </div>
+
+            <div class="detail-body">
+                <div class="detail-field">
+                    <span class="detail-label">Username</span>
+                    <p th:text="${credentials.username}">username</p>
+                </div>
+
+                <div class="detail-field">
+                    <span class="detail-label">Nome</span>
+                    <p th:text="${credentials.user.name}">Nome</p>
+                </div>
+
+                <div class="detail-field">
+                    <span class="detail-label">Cognome</span>
+                    <p th:text="${credentials.user.surname}">Cognome</p>
+                </div>
+
+                <div class="detail-field">
+                    <span class="detail-label">Email</span>
+                    <p th:text="${credentials.user.email}">email@esempio.it</p>
+                </div>
+            </div>
+
+            <div class="detail-actions">
+                <a th:href="@{/}" class="btn btn-secondary">&larr; Torna alla Home</a>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

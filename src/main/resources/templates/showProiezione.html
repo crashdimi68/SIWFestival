@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIW Festival - Dettaglio Proiezione</title>
+    <link rel="stylesheet" th:href="@{/css/stile.css}" />
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="page-content" th:if="${proiezione}">
+        <div class="detail-card">
+            <div class="detail-header">
+                <div class="detail-icon"></div>
+                <h1 th:text="${proiezione.film != null ? proiezione.film.titolo : 'Proiezione'}">Film</h1>
+                <span class="detail-badge" th:text="${proiezione.stato}">SCHEDULED</span>
+            </div>
+
+            <div class="detail-body">
+                <p th:if="${errore}" class="error-msg" th:text="${errore}">Errore</p>
+
+                <div class="highlight-box">
+                    <span class="highlight-value"
+                          th:text="${#temporals.format(proiezione.data, 'dd/MM/yyyy')} + ' - ' + ${#temporals.format(proiezione.ora, 'HH:mm')}">
+                        01/01/2026 - 20:00</span>
+                </div>
+
+                <div class="detail-field">
+                    <span class="detail-label">Film</span>
+                    <p th:if="${proiezione.film != null}">
+                        <a th:href="@{'/film/' + ${proiezione.film.id}}"
+                           th:text="${proiezione.film.titolo + ' (' + proiezione.film.anno + ')'}">Film</a>
+                    </p>
+                    <p th:if="${proiezione.film == null}" class="empty-text">Non assegnato</p>
+                </div>
+
+                <div class="detail-field">
+                    <span class="detail-label">Regista</span>
+                    <p th:if="${proiezione.film != null and proiezione.film.regista != null}">
+                        <a th:href="@{'/regista/' + ${proiezione.film.regista.id}}"
+                           th:text="${proiezione.film.regista.nome + ' ' + proiezione.film.regista.cognome}">Regista</a>
+                    </p>
+                    <p th:if="${proiezione.film == null or proiezione.film.regista == null}" class="empty-text">-</p>
+                </div>
+
+                <div class="detail-field">
+                    <span class="detail-label">Sala</span>
+                    <p th:if="${proiezione.sala != null}">
+                        <a th:href="@{'/sala/' + ${proiezione.sala.id}}"
+                           th:text="${proiezione.sala.nome + ' (' + proiezione.sala.capienza + ' posti)'}">Sala</a>
+                    </p>
+                    <p th:if="${proiezione.sala == null}" class="empty-text">Non assegnata</p>
+                </div>
+
+                <div class="detail-field">
+                    <span class="detail-label">Festival</span>
+                    <p th:if="${proiezione.festival != null}">
+                        <a th:href="@{'/festival/' + ${proiezione.festival.id}}"
+                           th:text="${proiezione.festival.nome}">Festival</a>
+                    </p>
+                </div>
+
+                <div class="detail-field">
+                    <span class="detail-label">Orario di Fine Stimato</span>
+                    <p th:text="${proiezione.fineStimata != null ? #temporals.format(proiezione.fineStimata, 'HH:mm') : '-'}">22:00</p>
+                </div>
+
+                <div sec:authorize="hasRole('ADMIN')" class="detail-actions" style="margin-top:1rem;">
+                    <a th:href="@{'/admin/proiezione/' + ${proiezione.id} + '/edit'}" class="btn btn-primary">Riprogramma</a>
+                    <form th:action="@{'/admin/proiezione/' + ${proiezione.id} + '/stato'}" method="POST" style="display:inline;">
+                        <select name="stato">
+                            <option value="SCHEDULED">SCHEDULED</option>
+                            <option value="COMPLETED">COMPLETED</option>
+                            <option value="CANCELLED">CANCELLED</option>
+                        </select>
+                        <button type="submit" class="btn btn-secondary">Cambia stato</button>
+                    </form>
+                    <form th:action="@{'/admin/proiezione/' + ${proiezione.id} + '/delete'}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-danger"
+                                onclick="return confirm('Eliminare questa proiezione?')">Elimina</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="detail-actions">
+                <a th:href="@{/festival}" class="btn btn-secondary">&larr; Torna ai Festival</a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SIW Festival - Gestione di festival cinematografici.">
+    <title>SIW Festival - Homepage</title>
+    <link rel="stylesheet" th:href="@{/css/stile.css}" />
+</head>
+
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="hero">
+
+        <h1>LUCI<br>IN <span class="highlight">SALA</span></h1>
+        <p class="hero-subtitle">
+            Scopri i festival, sfoglia i film in concorso, consulta il programma delle
+            proiezioni e lascia la tua recensione.
+        </p>
+        <div class="hero-actions">
+            <a th:href="@{/festival}" class="btn btn-primary">Vedi i Festival</a>
+            <a th:href="@{/film}" class="btn btn-secondary">Vedi i Film</a>
+        </div>
+    </section>
+</body>
+
+</html>

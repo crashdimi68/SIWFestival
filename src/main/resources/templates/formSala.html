@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIW Festival - Sala</title>
+    <link rel="stylesheet" th:href="@{/css/stile.css}" />
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="page-content">
+        <div class="form-container">
+            <h2 th:text="${sala.id != null ? 'Modifica Sala' : 'Nuova Sala'}">Sala</h2>
+
+            <form th:action="${sala.id != null ? '/admin/sala/' + sala.id + '/edit' : '/admin/sale'}"
+                  method="POST" th:object="${sala}">    
+ 
+                <label for="nome">Nome</label>
+                <input required type="text" id="nome" th:field="*{nome}" placeholder="Es. Sala Fellini" />
+                <span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="error-msg"></span>
+
+                <label for="indirizzo">Indirizzo</label>
+                <input required type="text" id="indirizzo" th:field="*{indirizzo}" placeholder="Es. Via Roma 1, Roma" />
+                <span th:if="${#fields.hasErrors('indirizzo')}" th:errors="*{indirizzo}" class="error-msg"></span>
+
+                <label for="capienza">Capienza (posti)</label>
+                <input required type="number" id="capienza" th:field="*{capienza}" placeholder="Es. 180" />
+                <span th:if="${#fields.hasErrors('capienza')}" th:errors="*{capienza}" class="error-msg"></span>
+
+                <button type="submit">Conferma</button>
+            </form>
+        </div>
+    </section>
+</body>
+</html>

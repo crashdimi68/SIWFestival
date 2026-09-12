@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIW Festival - Dashboard Admin</title>
+    <link rel="stylesheet" th:href="@{/css/stile.css}" />
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="page-content">
+        <div class="page-header">
+            <h1>Pannello Amministrazione</h1>
+            <p class="page-subtitle">Gestisci festival, film, registi, sale e proiezioni</p>
+        </div>
+
+        <div class="card-grid">
+            <div class="card">
+                <h3>Festival</h3>
+                <div class="card-links">
+                    <a th:href="@{/festival}" class="card-link card-link-primary">Tutti i Festival</a>
+                    <a th:href="@{/admin/festival/new}" class="card-link">+ Nuovo</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Film</h3>
+                <div class="card-links">
+                    <a th:href="@{/film}" class="card-link card-link-primary">Tutti i Film</a>
+                    <a th:href="@{/admin/film/new}" class="card-link">+ Nuovo</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Proiezioni</h3>
+                <div class="card-links">
+                    <a th:href="@{/admin/proiezioni}" class="card-link card-link-primary">Tutte le Proiezioni</a>
+                    <a th:href="@{/admin/proiezioni/new}" class="card-link">+ Programma</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Sale</h3>
+                <div class="card-links">
+                    <a th:href="@{/admin/sale}" class="card-link card-link-primary">Tutte le Sale</a>
+                    <a th:href="@{/admin/sale/new}" class="card-link">+ Nuova</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Registi</h3>
+                <div class="card-links">
+                    <a th:href="@{/registi}" class="card-link card-link-primary">Tutti i Registi</a>
+                    <a th:href="@{/admin/registi/new}" class="card-link">+ Nuovo</a>
+                </div>
+            </div>
+
+            <a th:href="@{/admin/performance}" class="card">
+                <h3>Analisi Prestazioni</h3>
+                <div class="card-arrow">Confronta &rarr;</div>
+            </a>
+        </div>
+    </section>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIW Festival - Lista Festival</title>
+    <link rel="stylesheet" th:href="@{/css/stile.css}" />
+</head>
+
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="page-content">
+        <div class="page-header">
+            <h1>Tutti i Festival</h1>
+            <p class="page-subtitle">Scegli un festival per vederne i dettagli, i film in concorso o il programma</p>
+        </div>
+
+        <div th:if="${festivalList.isEmpty()}" class="empty-state">
+            <p>Non ci sono festival nel sistema.</p>
+        </div>
+
+        <div th:unless="${festivalList.isEmpty()}" class="card-grid">
+            <div th:each="f : ${festivalList}" class="card">
+                <h3 th:text="${f.nome}">Nome Festival</h3>
+                <span class="card-meta" th:text="${f.citta} + ' - ' + ${f.anno}">Citta' - 2026</span>
+                <div class="card-links">
+                    <a th:href="@{'/festival/' + ${f.id}}" class="card-link">Dettagli</a>
+                    <a th:href="@{'/festival/' + ${f.id} + '/proiezioni'}" class="card-link">Proiezioni</a>
+                    <a th:href="@{'/festival/' + ${f.id} + '/programma'}"
+                        class="card-link card-link-primary">Programma</a>
+                </div>
+            </div>
+        </div>
+
+        <div sec:authorize="hasRole('ADMIN')" class="page-actions">
+            <a th:href="@{/admin/festival/new}" class="btn btn-secondary">Nuovo Festival</a>
+        </div>
+    </section>
+</body>
+
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIW Festival - Dettaglio Festival</title>
+    <link rel="stylesheet" th:href="@{/css/stile.css}" />
+</head>
+
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="page-content" th:if="${festival}">
+        <div class="detail-card">
+            <div class="detail-header">
+                <div class="detail-icon"></div>
+                <h1 th:text="${festival.nome}">Nome Festival</h1>
+                <span class="detail-badge" th:text="${festival.anno}">2026</span>
+            </div>
+
+            <div class="detail-body">
+                <div class="detail-field">
+                    <span class="detail-label">Citta'</span>
+                    <p th:text="${festival.citta}">Roma</p>
+                </div>
+
+                <div class="detail-field">
+                    <span class="detail-label">Periodo</span>
+                    <p th:text="${#temporals.format(festival.dataInizio, 'dd/MM/yyyy')} + ' - ' + ${#temporals.format(festival.dataFine, 'dd/MM/yyyy')}">
+                        01/01/2026 - 10/01/2026</p>
+                </div>
+
+                <div class="detail-field">
+                    <span class="detail-label">Descrizione</span>
+                    <p th:text="${festival.descrizione}">Descrizione del festival</p>
+                </div>
+
+                <div class="detail-field">
+                    <span class="detail-label">Film in Concorso</span>
+                    <div th:if="${festival.film != null and !festival.film.isEmpty()}" class="entity-list">
+                        <div th:each="f : ${festival.film}" class="entity-item">
+                            <a th:href="@{'/film/' + ${f.id}}">
+                                <span class="entity-name" th:text="${f.titolo}">Titolo Film</span>
+                                <span class="entity-meta" th:text="'(' + ${f.anno} + ')'">2020</span>
+                            </a>
+                            <form sec:authorize="hasRole('ADMIN')"
+                                th:action="@{'/admin/festival/' + ${festival.id} + '/removeFilm/' + ${f.id}}"
+                                method="POST" style="margin:0;">
+                                <button type="submit" class="btn-small btn-danger"
+                                    onclick="return confirm('Rimuovere questo film dal festival? Verranno eliminate anche le sue proiezioni.')">Rimuovi</button>
+                            </form>
+                        </div>
+                    </div>
+                    <p th:if="${festival.film == null or festival.film.isEmpty()}" class="empty-text">
+                        Nessun film ancora iscritto.
+                    </p>
+                </div>
+            </div>
+
+            <div class="detail-actions">
+                <a th:href="@{'/festival/' + ${festival.id} + '/programma'}" class="btn btn-primary">Programma</a>
+                <a th:href="@{'/festival/' + ${festival.id} + '/proiezioni'}" class="btn btn-primary">Proiezioni</a>
+                <a th:href="@{/festival}" class="btn btn-secondary">&larr; Torna ai Festival</a>
+            </div>
+
+            <div sec:authorize="hasRole('ADMIN')" class="detail-actions" style="margin-top:0.5rem;">
+                <a th:href="@{'/admin/festival/' + ${festival.id} + '/edit'}" class="btn btn-secondary">Modifica</a>
+                <a th:href="@{'/admin/festival/' + ${festival.id} + '/addFilm'}" class="btn btn-secondary">Aggiungi
+                    Film</a>
+                <a th:href="@{/admin/proiezioni/new(festivalId=${festival.id})}" class="btn btn-secondary">Programma
+                    Proiezione</a>
+                <form th:action="@{'/admin/festival/' + ${festival.id} + '/delete'}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-danger"
+                        onclick="return confirm('Eliminare questo festival e tutte le sue proiezioni?')">Elimina
+                        Festival</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section class="page-content" th:unless="${festival}">
+        <div class="empty-state">
+            <p>Festival non trovato.</p>
+            <a th:href="@{/festival}" class="btn btn-primary">&larr; Torna ai Festival</a>
+        </div>
+    </section>
+</body>
+
+</html>

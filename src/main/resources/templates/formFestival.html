@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIW Festival - Festival</title>
+    <link rel="stylesheet" th:href="@{/css/stile.css}" />
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="page-content">
+        <div class="form-container">
+            <h2 th:text="${festival.id != null ? 'Modifica Festival' : 'Nuovo Festival'}">Festival</h2>
+
+            <form th:action="${festival.id != null ? '/admin/festival/' + festival.id + '/edit' : '/admin/festival'}"
+                  method="POST" th:object="${festival}">
+
+                <label for="nome">Nome</label>
+                <input required type="text" id="nome" th:field="*{nome}" placeholder="Nome del festival" />
+                <span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="error-msg"></span>
+
+                <label for="anno">Anno</label>
+                <input required type="number" id="anno" th:field="*{anno}" placeholder="Es. 2026" />
+                <span th:if="${#fields.hasErrors('anno')}" th:errors="*{anno}" class="error-msg"></span>
+
+                <label for="citta">Citta'</label>
+                <input required type="text" id="citta" th:field="*{citta}" placeholder="Es. Roma" />
+                <span th:if="${#fields.hasErrors('citta')}" th:errors="*{citta}" class="error-msg"></span>
+
+                <label for="dataInizio">Data di Inizio</label>
+                <input required type="date" id="dataInizio" th:field="*{dataInizio}" />
+                <span th:if="${#fields.hasErrors('dataInizio')}" th:errors="*{dataInizio}" class="error-msg"></span>
+
+                <label for="dataFine">Data di Fine</label>
+                <input required type="date" id="dataFine" th:field="*{dataFine}" />
+                <span th:if="${#fields.hasErrors('dataFine')}" th:errors="*{dataFine}" class="error-msg"></span>
+
+                <label for="descrizione">Descrizione</label>
+                <textarea required id="descrizione" th:field="*{descrizione}" placeholder="Descrizione del festival" rows="3"></textarea>
+                <span th:if="${#fields.hasErrors('descrizione')}" th:errors="*{descrizione}" class="error-msg"></span>
+
+                <button type="submit">Conferma</button>
+            </form>
+        </div>
+    </section>
+</body>
+</html>
